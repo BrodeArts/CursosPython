@@ -1,12 +1,12 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-app = FastAPI()
+router = APIRouter()
 
 ################ GET #################
 
 #Esta sería una forma "tostón" de devolver una lista de usuarios.
-@app.get("/usersjson")
+@router.get("/usersjson")
 async def usersjson():
     return [{"name": "Antonio", "apellido": "diaz", "edad": 38},
             {"name": "Pepito", "apellido": "Fernández", "edad": 34},
@@ -40,18 +40,18 @@ def search_user(id: int):
 
 
 #Lista de todos los usuarios y esto ya lo devuelve con el formato JSON que queremos. Magia de BaseModel
-@app.get("/users")
+@router.get("/users")
 async def users():
     return users_list
 
 
 #Paso de parametros a través del PATH -> http://127.0.0.1:8000/user/1
-@app.get("/user/{id}")
+@router.get("/user/{id}")
 async def user(id: int):
     return search_user(id)
 
 #Paso de parámetros en la query -> http://127.0.0.1:8000/user/?id=1
-@app.get("/user/")
+@router.get("/user/")
 async def user(id: int):
     return search_user(id)
 
@@ -64,7 +64,7 @@ Le metemos tb lo que va a devolver al petición (response_model), en este caso u
 Esto deberíamos hacerlo siempre de cara a que la documentación sea más clara e indique bien lo que devolvemos
 """
 
-@app.post("/user/", response_model = User status_code = 201) 
+@router.post("/user/", response_model = User, status_code = 201) 
 async def user(user: User):
     if type(search_user(user.id)) == User:
         #return {"Error": "El usuario ya existe"} # En vez de devolver un msg, le vamos a devolver un status code
@@ -75,7 +75,7 @@ async def user(user: User):
 
 
 ################ PUT #################
-@app.put("/user/")
+@router.put("/user/")
 async def user(user: User):
 
     found = False
@@ -91,7 +91,7 @@ async def user(user: User):
         return saved_user
 
 ################ DELETE #################
-@app.delete("/user/{id}")
+@router.delete("/user/{id}")
 async def user(id: int):
     
     found = False

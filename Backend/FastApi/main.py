@@ -24,3 +24,5 @@ async def url():
 #Nosotros usaremos una extensión del propio visualstudio para hacerlo todo desde aquí:
 #Thunder client
 
+##Que es un CRUD? -> Create(post), Read(get), Update(put), Delete(delete)
+
